@@ -393,6 +393,12 @@ def main():
     cache = load_json(CACHE_FILE, {})
     stations = load_json(SUBTE_FILE, [])
     subte_lines = load_json(SUBTE_LINES_FILE, [])
+    # saneo de datos OSM (colour válido CSS, ref/name como texto) — defensa anti-inyección
+    for L in subte_lines:
+        c = str(L.get("colour") or "")
+        L["colour"] = c if re.match(r"^#[0-9A-Fa-f]{3,8}$|^[a-z]+$", c) else "#888"
+        L["ref"] = parse_str(L.get("ref")) or "?"
+        L["name"] = parse_str(L.get("name")) or ""
     print(f"Estaciones de subte cargadas: {len(stations)}  ·  líneas: {len(subte_lines)}")
 
     def cell_text(rowcells, field):

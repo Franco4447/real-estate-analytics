@@ -395,25 +395,26 @@ function initMap() {
   }).addTo(map);
 
   subteLayer = L.layerGroup();
+  const cssColour = c => /^#[0-9A-Fa-f]{3,8}$|^[a-z]+$/.test(String(c || "")) ? c : "#888"; // color CSS válido o fallback
   // recorrido de cada línea (debajo de las estaciones)
   (DATA.subte_lines || []).forEach(L_ => {
-    const col = L_.colour || "#888";
+    const col = cssColour(L_.colour);
     (L_.segments || []).forEach(seg => {
       L.polyline(seg, { color: col, weight: 4, opacity: .8, lineCap: "round", lineJoin: "round" })
-        .bindTooltip(`Subte ${L_.ref}`, { sticky: true })
+        .bindTooltip("Subte " + esc(L_.ref), { sticky: true })
         .addTo(subteLayer);
     });
   });
   // estaciones (encima de las líneas)
   (DATA.subte_stations || []).forEach(s => {
     L.marker([s.lat, s.lng], { icon: L.divIcon({ className: "", html: `<div class="subte-dot"></div>`, iconSize: [10, 10] }) })
-      .bindTooltip("🚇 " + s.name, { direction: "top" })
+      .bindTooltip("🚇 " + esc(s.name), { direction: "top" })
       .addTo(subteLayer);
   });
   // leyenda de colores de línea
   const sl = $("#subte-legend");
   if (sl) sl.innerHTML = (DATA.subte_lines || [])
-    .map(L_ => `<span class="subte-line-chip" style="background:${L_.colour || "#888"}" title="Línea ${L_.ref}">${L_.ref}</span>`).join("");
+    .map(L_ => `<span class="subte-line-chip" style="background:${esc(cssColour(L_.colour))}" title="Línea ${esc(L_.ref)}">${esc(L_.ref)}</span>`).join("");
 
   markerLayer = L.layerGroup().addTo(map);
   routeLayer = L.layerGroup().addTo(map);   // capa para círculos + recorrido
@@ -689,7 +690,7 @@ function openDetail(id) {
       <span class="bd-lbl">${w.emoji} ${w.label} <span class="bd-info">ⓘ</span></span>
       <div class="bar-track"><div class="bar-fill" style="width:${v}%;background:${scoreColor(v)}"></div></div>
       <span class="bd-val">${v}</span>
-      <div class="bd-tip" role="tooltip"><b>${w.emoji} ${esc(w.label)} = ${v}/100</b>${tip}<div class="bd-tip-foot">Cada factor se normaliza 0–100% sobre las ${DATA.properties.length} propiedades; el peso del slider los combina en el score final.</div></div>
+      <div class="bd-tip" role="tooltip"><b>${w.emoji} ${esc(w.label)} = ${v}/100</b>${tip}<div class="bd-tip-foot">Precio, m², distancia y antigüedad se normalizan 0–100% sobre las ${DATA.properties.length} propiedades; orientación, balcón y posición usan una escala fija. El peso del slider combina los 4 sub-scores.</div></div>
     </div>`;
   }).join("");
 
@@ -783,7 +784,8 @@ function openDetail(id) {
       const pct = +ps.value;
       const adj = p.precio * (1 - pct / 100);
       const um2 = p.m2 ? adj / p.m2 : null;
-      $("#ps-readout").innerHTML = `<b>${fmtUSD(adj)}</b> <span class="ps-pct">−${pct}%</span>`
+      $("#ps-readout").innerHTML = `<b>${fmtUSD(adj)}</b>`
+        + (pct > 0 ? ` <span class="ps-pct">−${pct}%</span>` : ` <span class="ps-unit">precio de lista</span>`)
         + (um2 != null ? ` · <b>${fmtInt(um2)}</b> <span class="ps-unit">USD/m²</span>` : "");
     };
     ps.addEventListener("input", upd); upd();
