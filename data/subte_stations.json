@@ -156,12 +156,6 @@
     "lon": -58.3811172
   },
   {
-    "name": "Constitución (F)",
-    "line": "",
-    "lat": -34.6271445,
-    "lon": -58.3812957
-  },
-  {
     "name": "Correo Central",
     "line": "",
     "lat": -34.6037,
@@ -174,34 +168,10 @@
     "lon": -58.4053431
   },
   {
-    "name": "Corrientes (F)",
-    "line": "",
-    "lat": -34.6045239,
-    "lon": -58.3922157
-  },
-  {
-    "name": "Corrientes (I)",
-    "line": "",
-    "lat": -34.5998448,
-    "lon": -58.4385675
-  },
-  {
     "name": "Córdoba",
     "line": "",
     "lat": -34.5991974,
     "lon": -58.4039401
-  },
-  {
-    "name": "Córdoba (F)",
-    "line": "",
-    "lat": -34.5997073,
-    "lon": -58.3928346
-  },
-  {
-    "name": "Córdoba (I)",
-    "line": "",
-    "lat": -34.5942825,
-    "lon": -58.4298944
   },
   {
     "name": "Diagonal Norte",
@@ -438,12 +408,6 @@
     "lon": -58.3915527
   },
   {
-    "name": "Nueva Pompeya (construcción paralizada)",
-    "line": "",
-    "lat": -34.6519859,
-    "lon": -58.4163653
-  },
-  {
     "name": "Olleros",
     "line": "",
     "lat": -34.5702528,
@@ -528,12 +492,6 @@
     "lon": -58.4211107
   },
   {
-    "name": "Plaza Italia (F)",
-    "line": "",
-    "lat": -34.5816248,
-    "lon": -58.4207562
-  },
-  {
     "name": "Plaza Miserere",
     "line": "",
     "lat": -34.6097461,
@@ -564,12 +522,6 @@
     "lon": -58.448639
   },
   {
-    "name": "Pueyrredon (F)",
-    "line": "",
-    "lat": -34.5874429,
-    "lon": -58.3974007
-  },
-  {
     "name": "Pueyrredón (B)",
     "line": "",
     "lat": -34.6045673,
@@ -582,12 +534,6 @@
     "lon": -58.4031408
   },
   {
-    "name": "Pueyrredón (G)",
-    "line": "",
-    "lat": -34.594539,
-    "lon": -58.4023003
-  },
-  {
     "name": "Retiro (C)",
     "line": "",
     "lat": -34.5913025,
@@ -598,24 +544,6 @@
     "line": "",
     "lat": -34.5921903,
     "lon": -58.3761678
-  },
-  {
-    "name": "Retiro (G)",
-    "line": "",
-    "lat": -34.5928622,
-    "lon": -58.3755149
-  },
-  {
-    "name": "Rivadavia (F)",
-    "line": "",
-    "lat": -34.6089368,
-    "lon": -58.3918879
-  },
-  {
-    "name": "Rivadavia (I)",
-    "line": "",
-    "lat": -34.6204106,
-    "lon": -58.4412692
   },
   {
     "name": "Río de Janeiro",
@@ -654,12 +582,6 @@
     "lon": -58.4704936
   },
   {
-    "name": "Santa Fe (F)",
-    "line": "",
-    "lat": -34.595961,
-    "lon": -58.3932128
-  },
-  {
     "name": "Santa Fe - Carlos Jáuregui",
     "line": "",
     "lat": -34.5947089,
@@ -676,12 +598,6 @@
     "line": "",
     "lat": -34.5820018,
     "lon": -58.420877
-  },
-  {
-    "name": "Sáenz (construcción paralizada)",
-    "line": "",
-    "lat": -34.6484435,
-    "lon": -58.4162704
   },
   {
     "name": "Sáenz Peña",
@@ -718,12 +634,6 @@
     "line": "",
     "lat": -34.604043,
     "lon": -58.3870845
-  },
-  {
-    "name": "Uruguay (G)",
-    "line": "",
-    "lat": -34.5957594,
-    "lon": -58.3872014
   },
   {
     "name": "Varela",

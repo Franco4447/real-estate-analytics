@@ -46,6 +46,7 @@ ROOT = Path(__file__).resolve().parent
 DATA_DIR = ROOT / "data"
 CACHE_FILE = DATA_DIR / "geocode_cache.json"
 SUBTE_FILE = DATA_DIR / "subte_stations.json"
+SUBTE_LINES_FILE = DATA_DIR / "subte_lines.json"
 OUT_FILE = ROOT / "data.js"              # PÚBLICO: se commitea y se publica (sin precios de negociación)
 PRIVATE_FILE = ROOT / "data.private.js"  # LOCAL: datos completos; gitignoreado, sólo para preview local
 
@@ -391,7 +392,8 @@ def main():
 
     cache = load_json(CACHE_FILE, {})
     stations = load_json(SUBTE_FILE, [])
-    print(f"Estaciones de subte cargadas: {len(stations)}")
+    subte_lines = load_json(SUBTE_LINES_FILE, [])
+    print(f"Estaciones de subte cargadas: {len(stations)}  ·  líneas: {len(subte_lines)}")
 
     def cell_text(rowcells, field):
         idx = mapping.get(field)
@@ -548,6 +550,7 @@ def main():
         "weights_default": {"precio": 0.25, "ubicacion": 0.25, "tamano": 0.25, "estado": 0.25},
         "fields_detected": sorted(mapping.keys()),
         "subte_stations": [{"name": s["name"], "lat": s["lat"], "lng": s["lon"]} for s in stations],
+        "subte_lines": subte_lines,
         "stats": stats,
         "properties": props,
     }

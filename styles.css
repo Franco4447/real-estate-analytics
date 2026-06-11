@@ -185,7 +185,9 @@ input[type="search"] { width: 100%; }
 }
 .pin span { transform: rotate(45deg); color: #fff; font-weight: 800; font-size: .78rem; }
 .pin.active { outline: 3px solid var(--accent); }
-.subte-dot { background: #7a4ed8; border: 2px solid #fff; border-radius: 50%; width: 11px; height: 11px; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
+.subte-dot { background: #fff; border: 2px solid #2a3142; border-radius: 50%; width: 10px; height: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.45); }
+.subte-legend { display: flex; flex-wrap: wrap; gap: 4px; width: 100%; }
+.subte-line-chip { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: .66rem; text-shadow: 0 1px 1px rgba(0,0,0,.4); }
 .leaflet-popup-content { margin: 11px 13px; font-size: .82rem; }
 .popup h4 { margin: 0 0 4px; font-size: .92rem; }
 .popup .p-grid { display: grid; grid-template-columns: auto auto; gap: 2px 12px; margin: 6px 0; }
@@ -219,11 +221,32 @@ input[type="search"] { width: 100%; }
 
 .d-section { margin: 18px 0; }
 .d-section h3 { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 9px; }
-.d-breakdown .bd-row { display: grid; grid-template-columns: 92px 1fr 42px; align-items: center; gap: 8px; margin-bottom: 7px; }
+.d-breakdown .bd-row { position: relative; display: grid; grid-template-columns: 92px 1fr 42px; align-items: center; gap: 8px; margin-bottom: 7px; cursor: help; border-radius: 6px; }
+.d-breakdown .bd-row:hover, .d-breakdown .bd-row:focus-visible { background: var(--surface-2); outline: none; }
 .d-breakdown .bd-row .bd-lbl { font-size: .78rem; }
+.d-breakdown .bd-info { color: var(--muted); font-size: .72rem; }
 .d-breakdown .bar-track { height: 8px; background: var(--surface-2); border-radius: 5px; overflow: hidden; }
 .d-breakdown .bar-fill { height: 100%; border-radius: 5px; }
 .d-breakdown .bd-val { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; font-size: .78rem; }
+/* tooltip explicativo del sub-score */
+.d-breakdown .bd-tip {
+  display: none; position: absolute; left: 0; right: 0; top: calc(100% + 4px); z-index: 6;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+  border-radius: 9px; box-shadow: var(--shadow-lg); padding: 9px 11px; font-size: .72rem; line-height: 1.5;
+}
+.d-breakdown .bd-tip b { display: block; margin-bottom: 4px; font-size: .76rem; }
+.d-breakdown .bd-tip-foot { margin-top: 5px; color: var(--muted); font-size: .66rem; border-top: 1px solid var(--border); padding-top: 4px; }
+.d-breakdown .bd-row:hover .bd-tip, .d-breakdown .bd-row:focus .bd-tip, .d-breakdown .bd-row:focus-within .bd-tip { display: block; }
+
+/* simulador de descuento de precio */
+.price-sim { margin-top: 12px; padding: 11px 12px; background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.price-sim .ps-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-size: .76rem; color: var(--text-soft); margin-bottom: 7px; }
+.price-sim .ps-readout { font-size: .82rem; color: var(--text); }
+.price-sim .ps-readout b { color: var(--accent); font-variant-numeric: tabular-nums; }
+.price-sim .ps-pct { color: var(--good); font-weight: 700; }
+.price-sim .ps-unit { color: var(--muted); font-size: .72rem; }
+.price-sim input[type="range"] { width: 100%; accent-color: var(--accent); }
+.price-sim .ps-scale { display: flex; justify-content: space-between; font-size: .64rem; color: var(--muted); margin-top: 2px; }
 
 .d-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .d-grid .d-cell { background: var(--surface-2); border-radius: 9px; padding: 8px 11px; }

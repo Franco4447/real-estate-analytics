@@ -395,11 +395,25 @@ function initMap() {
   }).addTo(map);
 
   subteLayer = L.layerGroup();
+  // recorrido de cada línea (debajo de las estaciones)
+  (DATA.subte_lines || []).forEach(L_ => {
+    const col = L_.colour || "#888";
+    (L_.segments || []).forEach(seg => {
+      L.polyline(seg, { color: col, weight: 4, opacity: .8, lineCap: "round", lineJoin: "round" })
+        .bindTooltip(`Subte ${L_.ref}`, { sticky: true })
+        .addTo(subteLayer);
+    });
+  });
+  // estaciones (encima de las líneas)
   (DATA.subte_stations || []).forEach(s => {
-    L.marker([s.lat, s.lng], { icon: L.divIcon({ className: "", html: `<div class="subte-dot" title="Subte ${s.name}"></div>`, iconSize: [11, 11] }) })
+    L.marker([s.lat, s.lng], { icon: L.divIcon({ className: "", html: `<div class="subte-dot"></div>`, iconSize: [10, 10] }) })
       .bindTooltip("🚇 " + s.name, { direction: "top" })
       .addTo(subteLayer);
   });
+  // leyenda de colores de línea
+  const sl = $("#subte-legend");
+  if (sl) sl.innerHTML = (DATA.subte_lines || [])
+    .map(L_ => `<span class="subte-line-chip" style="background:${L_.colour || "#888"}" title="Línea ${L_.ref}">${L_.ref}</span>`).join("");
 
   markerLayer = L.layerGroup().addTo(map);
   routeLayer = L.layerGroup().addTo(map);   // capa para círculos + recorrido
@@ -639,6 +653,29 @@ function cmp(val, avg, lowerBetter) {
   return `<span class="dc-cmp ${good ? "cmp-good" : "cmp-bad"}">${pct > 0 ? "+" : ""}${pct}% vs prom</span>`;
 }
 
+// Explica cómo se compuso cada sub-score, usando los componentes normalizados (score_parts).
+function scoreExplain(p, key) {
+  const sp = p.score_parts || {};
+  const pc = x => Math.round((x || 0) * 100) + "%";
+  if (key === "precio") return [
+    `60% · USD/m² (${fmtInt(p.usd_m2)} → ${pc(sp.n_usd_m2)})`,
+    `40% · precio total (${fmtUSD(p.precio)} → ${pc(sp.n_precio)})`,
+    `menor $/m² y precio ⇒ mejor`];
+  if (key === "ubicacion") return [
+    `80% · cercanía a subte (${p.subte_dist_m != null ? p.subte_dist_m + " m → " + pc(sp.n_dist) : "s/d"})`,
+    `20% · transporte en notas (${p.transporte_motivo ? "sí ✓" : "no"})`];
+  if (key === "tamano") return [
+    `70% · superficie (${fmtM2(p.m2)} → ${pc(sp.n_m2)})`,
+    `30% · ambientes (${p.ambientes != null ? p.ambientes : "s/d"} → ${pc(sp.n_amb)})`];
+  if (key === "estado") return [
+    `35% · antigüedad (${p.antiguedad != null ? p.antiguedad + " años" : "s/d"} → ${pc(sp.n_antig)})`,
+    `25% · orientación (${p.orientacion || "s/d"} → ${pc(sp.orient)})`,
+    `25% · balcón/terraza (${p.balcon || "s/d"} → ${pc(sp.outdoor)})`,
+    `15% · posición (${p.posicion || "s/d"} → ${pc(sp.posic)})`,
+    p.refacciones ? `−15% por refacciones pendientes (en notas)` : ""].filter(Boolean);
+  return [];
+}
+
 function openDetail(id) {
   const p = DATA.properties.find(x => pid(x) === id);
   if (!p) return;
@@ -647,9 +684,13 @@ function openDetail(id) {
 
   const breakdown = WEIGHT_DEFS.map(w => {
     const v = Math.round((p.scores?.[w.key] || 0) * 100);
-    return `<div class="bd-row"><span class="bd-lbl">${w.emoji} ${w.label}</span>
+    const tip = scoreExplain(p, w.key).map(l => `<div>• ${esc(l)}</div>`).join("");
+    return `<div class="bd-row" tabindex="0" aria-label="${esc(w.label)}: ${v} de 100">
+      <span class="bd-lbl">${w.emoji} ${w.label} <span class="bd-info">ⓘ</span></span>
       <div class="bar-track"><div class="bar-fill" style="width:${v}%;background:${scoreColor(v)}"></div></div>
-      <span class="bd-val">${v}</span></div>`;
+      <span class="bd-val">${v}</span>
+      <div class="bd-tip" role="tooltip"><b>${w.emoji} ${esc(w.label)} = ${v}/100</b>${tip}<div class="bd-tip-foot">Cada factor se normaliza 0–100% sobre las ${DATA.properties.length} propiedades; el peso del slider los combina en el score final.</div></div>
+    </div>`;
   }).join("");
 
   const cell = (val, lbl, comparison) => `<div class="d-cell"><div class="dc-val">${val}</div><div class="dc-lbl">${esc(lbl)}</div>${comparison || ""}</div>`;
@@ -681,6 +722,11 @@ function openDetail(id) {
         ${p.margen_neg_pct != null ? cell(p.margen_neg_pct + "%", "Margen de negociación", `<span class="dc-cmp">a ${fmtUSD(p.negociar_a)}</span>`) : ""}
         ${cell(fmtUSD(p.p25), "Anticipo 25%")}
         ${cell(fmtUSD(p.p75), "Crédito 75%")}
+      </div>
+      <div class="price-sim">
+        <div class="ps-head"><span>🔻 Simular descuento</span><span class="ps-readout" id="ps-readout"></span></div>
+        <input type="range" id="ps-slider" min="0" max="25" step="0.5" value="0" aria-label="Descuento sobre el precio (%)">
+        <div class="ps-scale"><span>precio de lista</span><span>−25%</span></div>
       </div>
     </div>
 
@@ -729,6 +775,19 @@ function openDetail(id) {
     closeDetail(); map.setView([p.lat, p.lng], 16, { animate: true });
     markers[id]?.openPopup();
   });
+
+  // simulador de descuento: precio original → −25%, recalcula USD/m² en vivo
+  const ps = $("#ps-slider");
+  if (ps && p.precio != null) {
+    const upd = () => {
+      const pct = +ps.value;
+      const adj = p.precio * (1 - pct / 100);
+      const um2 = p.m2 ? adj / p.m2 : null;
+      $("#ps-readout").innerHTML = `<b>${fmtUSD(adj)}</b> <span class="ps-pct">−${pct}%</span>`
+        + (um2 != null ? ` · <b>${fmtInt(um2)}</b> <span class="ps-unit">USD/m²</span>` : "");
+    };
+    ps.addEventListener("input", upd); upd();
+  }
   renderList();
 }
 
@@ -833,6 +892,7 @@ function wireEvents() {
   $("#toggle-subte").addEventListener("change", e => {
     state.showSubte = e.target.checked;
     if (e.target.checked) subteLayer.addTo(map); else map.removeLayer(subteLayer);
+    const sl = $("#subte-legend"); if (sl) sl.hidden = !e.target.checked;
   });
 
   $("#btn-route").addEventListener("click", toggleRoute);
