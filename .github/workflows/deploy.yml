@@ -36,10 +36,8 @@ jobs:
           mkdir -p _site
           cp index.html styles.css app.js data.js _site/
 
-      - name: Configurar Pages (auto-habilita si hace falta)
+      - name: Configurar Pages
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
