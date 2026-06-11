@@ -1,0 +1,65 @@
+{
+  "bacacay 2500, capital federal": {
+    "lat": -34.6268443,
+    "lng": -58.4650587,
+    "barrio": "Flores",
+    "source": "nominatim",
+    "display": "Bacacay 2500, Flores, Comuna 7, CABA"
+  },
+  "bartolome mitre 4200, capital federal": {
+    "lat": -34.6103416,
+    "lng": -58.425836,
+    "barrio": "Almagro",
+    "source": "nominatim",
+    "display": "Bartolome Mitre 4200, Almagro, Comuna 5, CABA"
+  },
+  "av. san juan 200, capital federal": {
+    "lat": -34.6217508,
+    "lng": -58.3679007,
+    "barrio": "San Telmo",
+    "source": "nominatim",
+    "display": "Avenida San Juan 200, San Telmo, CABA"
+  },
+  "pumacahua 100, capital federal": {
+    "lat": -34.6274815,
+    "lng": -58.4544982,
+    "barrio": "Flores",
+    "source": "nominatim",
+    "display": "Pumacahua 100, Flores, Comuna 7, CABA"
+  },
+  "yerbal 2357, capital federal": {
+    "lat": -34.6273732,
+    "lng": -58.4625604,
+    "barrio": "Flores",
+    "source": "nominatim",
+    "display": "Yerbal 2357, Flores, Comuna 7, CABA"
+  },
+  "bogota 2300, capital federal": {
+    "lat": -34.624937,
+    "lng": -58.4626046,
+    "barrio": "Flores",
+    "source": "nominatim",
+    "display": "Bogota 2300, Flores, Comuna 7, CABA"
+  },
+  "av. juan bautista justo 2500, capital federal": {
+    "lat": -34.5942846,
+    "lng": -58.4433427,
+    "barrio": "Villa Crespo",
+    "source": "nominatim",
+    "display": "2500, Avenida Juan Bautista Justo, Villa Crespo, Buenos Aires, Distrito Audiovisual, Comuna 15, Ciudad Autónoma de Bueno"
+  },
+  "general jose gervasio artigas 46, capital federal": {
+    "lat": -34.6286457,
+    "lng": -58.4644572,
+    "barrio": "Flores",
+    "source": "nominatim",
+    "display": "46, General José Gervasio Artigas, Flores, Buenos Aires, Comuna 7, Ciudad Autónoma de Buenos Aires, C1406GMA, Argentina"
+  },
+  "coronel apolinario figueroa 400, capital federal": {
+    "lat": -34.604808,
+    "lng": -58.446072,
+    "barrio": "Villa Crespo",
+    "source": "nominatim",
+    "display": "400, Coronel Apolinario Figueroa, Villa Crespo, Buenos Aires, Comuna 15, Ciudad Autónoma de Buenos Aires, C1414EDG, Arge"
+  }
+}

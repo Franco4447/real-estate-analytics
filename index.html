@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Departamentos · Comparativa CABA</title>
+  <meta name="description" content="Panel comparativo y mapa interactivo de departamentos en venta (CABA)." />
+
+  <!-- Leaflet -->
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ===================== HEADER ===================== -->
+  <header class="app-header">
+    <div class="title-block">
+      <h1>🏠 Comparativa de Departamentos</h1>
+      <p class="subtitle">Panel y mapa interactivo para decidir a dónde mudarme · CABA</p>
+    </div>
+    <div class="meta-block" id="meta-block"><!-- fuente / fecha / geocodificados --></div>
+  </header>
+
+  <!-- ===================== KPIs ===================== -->
+  <section class="kpi-bar" id="kpi-bar" aria-label="Indicadores generales"></section>
+
+  <!-- ===================== CONTROLES ===================== -->
+  <section class="controls">
+    <div class="control-row">
+      <div class="ctl search">
+        <input type="search" id="search" placeholder="🔎 Buscar dirección, barrio o nota…" />
+      </div>
+      <div class="ctl">
+        <label for="sort">Ordenar por</label>
+        <select id="sort">
+          <option value="score">Score (mejor primero)</option>
+          <option value="precio_asc">Precio ↑</option>
+          <option value="precio_desc">Precio ↓</option>
+          <option value="usd_m2">USD/m² ↑</option>
+          <option value="m2">m² ↓</option>
+          <option value="subte">Cerca de subte ↑</option>
+          <option value="top">Ranking original</option>
+        </select>
+      </div>
+      <button class="toggle-btn" id="btn-weights" aria-expanded="false">⚖️ Pesos del score</button>
+      <button class="toggle-btn" id="btn-filters" aria-expanded="false">⛃ Filtros</button>
+      <button class="toggle-btn" id="btn-analysis">📊 Análisis</button>
+    </div>
+
+    <!-- Pesos -->
+    <div class="panel-collapsible" id="weights-panel" hidden>
+      <div class="weights-grid" id="weights-grid"></div>
+      <div class="weights-actions">
+        <span class="hint">Ajustá cuánto pesa cada dimensión; el ranking se recalcula al instante.</span>
+        <button class="link-btn" id="btn-weights-reset">Restablecer (equilibrado)</button>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="panel-collapsible" id="filters-panel" hidden>
+      <div class="filters-grid" id="filters-grid"></div>
+      <div class="weights-actions">
+        <span class="hint" id="filter-count"></span>
+        <button class="link-btn" id="btn-filters-reset">Limpiar filtros</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CUERPO ===================== -->
+  <main class="layout">
+    <!-- Pestañas (solo mobile) -->
+    <div class="mobile-tabs" id="mobile-tabs">
+      <button data-view="list" class="active">Lista</button>
+      <button data-view="map">Mapa</button>
+    </div>
+
+    <section class="list-pane" id="list-pane" aria-label="Listado de propiedades">
+      <div class="list-head">
+        <span id="list-count"></span>
+      </div>
+      <div id="cards"></div>
+    </section>
+
+    <section class="map-pane" id="map-pane">
+      <div id="map"></div>
+      <button class="map-btn" id="btn-route" aria-pressed="false"
+              title="Agrupa los deptos por cercanía y traza el recorrido más corto para conocer todos los barrios">🧭 Planear recorrido</button>
+      <aside class="route-panel" id="route-panel" hidden aria-label="Recorrido recomendado">
+        <div id="route-content"></div>
+      </aside>
+      <div class="map-legend">
+        <span class="legend-title">Score</span>
+        <span class="legend-grad"></span>
+        <span class="legend-min">bajo</span><span class="legend-max">alto</span>
+        <label class="legend-subte"><input type="checkbox" id="toggle-subte" /> Estaciones de subte</label>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== DETALLE (slide-over) ===================== -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+  <aside class="drawer" id="detail-drawer" hidden role="dialog" aria-modal="true" aria-label="Detalle del departamento">
+    <button class="drawer-close" id="drawer-close" aria-label="Cerrar">✕</button>
+    <div id="detail-content"></div>
+  </aside>
+
+  <!-- ===================== ANÁLISIS (modal) ===================== -->
+  <div class="modal-backdrop" id="analysis-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-label="Análisis comparativo">
+      <div class="modal-head">
+        <h2>📊 Análisis comparativo</h2>
+        <button class="drawer-close" id="analysis-close" aria-label="Cerrar">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="chart-card">
+          <h3>Precio vs. Superficie <span class="muted">(burbuja = score; ideal: arriba-izquierda)</span></h3>
+          <div class="chart-wrap"><canvas id="chart-scatter"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>USD por m² <span class="muted">(menor es mejor valor)</span></h3>
+          <div class="chart-wrap"><canvas id="chart-usdm2"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <h3>Distancia caminando a la subte <span class="muted">(minutos)</span></h3>
+          <div class="chart-wrap"><canvas id="chart-subte"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <span>Datos: <code id="footer-src">data.js</code> · generado por <code>build.py</code> desde el Excel de <code>/data</code>.</span>
+    <span>Mapa © OpenStreetMap · Geocodificación Nominatim.</span>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script>
+    /* Sólo en local (no en GitHub Pages): sobrescribe con los datos completos
+       (incluye precios de negociación) si data.private.js existe. */
+    if (["localhost", "127.0.0.1", ""].includes(location.hostname))
+      document.write('<scr' + 'ipt src="data.private.js"></scr' + 'ipt>');
+  </script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+          integrity="sha384-9nhczxUqK87bcKHh20fSQcTGD4qq5GhayNYSYWqwBkINBhOfQLg/P5HG5lF1urn4"
+          crossorigin="anonymous"></script>
+  <script src="app.js"></script>
+</body>
+</html>

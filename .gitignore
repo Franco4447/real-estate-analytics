@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# El Excel queda SÓLO en tu máquina (contiene tus precios de negociación). No se sube.
+data/*.xlsx
+data/*.xlsm
+~$*.xlsx
+~$*.xlsm
+
+# Datos COMPLETOS (con precios de negociación): sólo para preview local, nunca se publican.
+data.private.js
+
+# Build local de Pages
+_site/
+
+# NOTA: data.js SÍ se versiona a propósito. Lo genera build.py SIN los precios de
+# negociación (versión pública/segura) y es lo que sirve GitHub Pages.
+
+# SO
+.DS_Store
+Thumbs.db
