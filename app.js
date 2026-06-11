@@ -407,8 +407,9 @@ function initMap() {
   });
   // estaciones (encima de las líneas)
   (DATA.subte_stations || []).forEach(s => {
+    const ln = (s.lines && s.lines.length) ? " · " + (s.lines.length > 1 ? "Líneas " : "Línea ") + s.lines.join("/") : "";
     L.marker([s.lat, s.lng], { icon: L.divIcon({ className: "", html: `<div class="subte-dot"></div>`, iconSize: [10, 10] }) })
-      .bindTooltip("🚇 " + esc(s.name), { direction: "top" })
+      .bindTooltip("🚇 " + esc(s.name) + esc(ln), { direction: "top" })
       .addTo(subteLayer);
   });
   // leyenda de colores de línea
