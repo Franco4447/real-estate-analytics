@@ -4,7 +4,11 @@ Panel analítico y mapa interactivo para decidir **a qué departamento mudarme**
 por un único Excel. Pensado para publicarse en **GitHub Pages**: editás el Excel, hacés
 `git push`, y el sitio se reconstruye y redespliega solo.
 
-![flujo](https://img.shields.io/badge/fuente-Excel-217346) ![deploy](https://img.shields.io/badge/deploy-GitHub%20Pages-2f6df0)
+## 🔴 EN VIVO → **https://franco4447.github.io/real-estate-analytics/**
+
+[![Ver el sitio en vivo](https://img.shields.io/badge/🔴_Ver_sitio-EN_VIVO-2f6df0?style=for-the-badge)](https://franco4447.github.io/real-estate-analytics/)
+
+![fuente](https://img.shields.io/badge/fuente-Excel-217346) ![deploy](https://img.shields.io/badge/deploy-GitHub%20Pages-2f6df0)
 
 ---
 
