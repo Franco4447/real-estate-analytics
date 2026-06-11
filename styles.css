@@ -262,6 +262,21 @@ input[type="search"] { width: 100%; }
 .map-btn:hover { filter: brightness(1.05); transform: translateY(-1px); }
 .map-btn.active { background: var(--surface); color: var(--accent); box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
 
+/* botón maximizar (arriba a la izquierda, debajo del zoom de Leaflet) */
+.map-maximize {
+  position: absolute; top: 80px; left: 11px; z-index: 600;
+  width: 34px; height: 34px; display: grid; place-items: center;
+  font-size: 1.05rem; line-height: 1; cursor: pointer;
+  background: var(--surface); color: var(--text); border: 1px solid var(--border);
+  border-radius: 8px; box-shadow: var(--shadow); transition: .15s;
+}
+.map-maximize:hover { color: var(--accent); border-color: var(--accent); }
+.map-maximize.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* mapa a pantalla completa */
+.map-pane.fs { position: fixed; inset: 0; z-index: 800; height: auto; }
+body.map-fs { overflow: hidden; }
+
 .route-panel {
   position: absolute; top: 58px; right: 12px; z-index: 600;
   width: min(320px, calc(100% - 24px)); max-height: calc(100% - 86px); overflow-y: auto;

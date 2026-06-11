@@ -438,6 +438,18 @@ function highlightMarker(id, on) {
   if (pin) pin.classList.toggle("active", on);
 }
 
+function toggleMaximize() {
+  const on = $("#map-pane").classList.toggle("fs");
+  document.body.classList.toggle("map-fs", on);
+  const b = $("#btn-maximize");
+  b.classList.toggle("active", on);
+  b.setAttribute("aria-pressed", String(on));
+  b.textContent = on ? "🗗" : "⛶";
+  b.title = on ? "Restaurar el mapa (Esc)" : "Maximizar el mapa (Esc para salir)";
+  b.setAttribute("aria-label", on ? "Restaurar el tamaño del mapa" : "Maximizar el mapa a pantalla completa");
+  setTimeout(() => map.invalidateSize(), 80);   // Leaflet recalcula tras el cambio de tamaño
+}
+
 /* ---------------- recorrido: render sobre el mapa ---------------- */
 function toggleRoute() {
   state.routeMode = !state.routeMode;
@@ -813,8 +825,9 @@ function wireEvents() {
   $("#drawer-backdrop").addEventListener("click", closeDetail);
   document.addEventListener("keydown", e => {
     if (e.key !== "Escape") return;
-    if (!$("#detail-drawer").hidden) closeDetail();
-    if (!$("#analysis-backdrop").hidden) closeAnalysis();
+    if (!$("#detail-drawer").hidden) { closeDetail(); return; }
+    if (!$("#analysis-backdrop").hidden) { closeAnalysis(); return; }
+    if ($("#map-pane").classList.contains("fs")) toggleMaximize();
   });
 
   $("#toggle-subte").addEventListener("change", e => {
@@ -823,6 +836,7 @@ function wireEvents() {
   });
 
   $("#btn-route").addEventListener("click", toggleRoute);
+  $("#btn-maximize").addEventListener("click", toggleMaximize);
 
   $$("#mobile-tabs button").forEach(b => b.addEventListener("click", () => {
     $$("#mobile-tabs button").forEach(x => x.classList.remove("active"));
