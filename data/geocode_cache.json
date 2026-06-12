@@ -61,5 +61,12 @@
     "barrio": "Villa Crespo",
     "source": "nominatim",
     "display": "400, Coronel Apolinario Figueroa, Villa Crespo, Buenos Aires, Comuna 15, Ciudad Autónoma de Buenos Aires, C1414EDG, Arge"
+  },
+  "dr. enrique finochietto 420, barracas, capital federal": {
+    "lat": -34.6282176,
+    "lng": -58.3711604,
+    "barrio": "Barracas",
+    "source": "nominatim",
+    "display": "420, Doctor Enrique Finochietto, Barracas, Buenos Aires, Distrito de Las Artes, Comuna 4, Ciudad Autónoma de Buenos Aire"
   }
 }
