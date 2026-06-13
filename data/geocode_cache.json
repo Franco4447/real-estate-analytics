@@ -68,5 +68,26 @@
     "barrio": "Barracas",
     "source": "nominatim",
     "display": "420, Doctor Enrique Finochietto, Barracas, Buenos Aires, Distrito de Las Artes, Comuna 4, Ciudad Autónoma de Buenos Aire"
+  },
+  "av. juan bautista justo 2550, capital federal": {
+    "lat": -34.5946033,
+    "lng": -58.4437459,
+    "barrio": "Villa Crespo",
+    "source": "nominatim",
+    "display": "Dia, 2550, Avenida Juan Bautista Justo, Villa Crespo, Buenos Aires, Distrito Audiovisual, Comuna 15, Ciudad Autónoma de "
+  },
+  "av. san juan 270, capital federal": {
+    "lat": -34.6218551,
+    "lng": -58.3692499,
+    "barrio": "San Telmo",
+    "source": "nominatim",
+    "display": "270, Avenida San Juan, San Telmo, Buenos Aires, Distrito de Las Artes, Comuna 1, Ciudad Autónoma de Buenos Aires, C1147A"
+  },
+  "av. diaz velez 5171, capital federal": {
+    "lat": -34.6086697,
+    "lng": -58.439682,
+    "barrio": "Caballito",
+    "source": "nominatim",
+    "display": "5171, Avenida Díaz Vélez, Caballito, Buenos Aires, Comuna 6, Ciudad Autónoma de Buenos Aires, C1405DCG, Argentina"
   }
 }
